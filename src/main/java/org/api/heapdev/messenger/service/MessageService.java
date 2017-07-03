@@ -19,8 +19,23 @@ public class MessageService {
 		return messages.get(id);
 	}
 	
-	public void addMessage(Message message){
-		
+	public Message addMessage(Message message){
+		message.setId(messages.size()+1);
+		messages.put(message.getId(), message);
+		return message;
 	}
-
+	
+	public Message updateMessage(Message message){
+		if(message.getId()<=0){
+			return null;
+		}
+		messages.put(message.getId(), message);
+		return message;
+	}
+	
+	public Message deleteMessage(Message message){
+		return messages.remove(message.getId());
+	}
+	
+	
 }
