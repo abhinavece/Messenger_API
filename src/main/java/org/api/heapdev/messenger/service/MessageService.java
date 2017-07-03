@@ -33,8 +33,8 @@ public class MessageService {
 		return message;
 	}
 	
-	public Message deleteMessage(Message message){
-		return messages.remove(message.getId());
+	public Message deleteMessage(Long id){
+		return messages.remove(id);
 	}
 	
 	
