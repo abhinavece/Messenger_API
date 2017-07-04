@@ -1,8 +1,8 @@
 package org.api.heapdev.messenger.resources;
 
-
 import java.util.List;
 
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -21,51 +21,53 @@ import org.api.heapdev.messenger.service.MessageService;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class MessageResource {
-	
+
 	MessageService messageService = new MessageService();
-	
+
 	@GET
-	public List<Message> getMessages(@QueryParam("year") int year, 
-									@QueryParam("start") int start, 
-									@QueryParam("size") int size){
-		if(year > 0){
-			return messageService.getAllMessagesOfTheYear(year);
+	public List<Message> getMessages(@BeanParam MessageFilterBean filterBean) {
+		if (filterBean.getYear() > 0) {
+			return messageService.getAllMessagesOfTheYear(filterBean.getYear());
 		}
-		if(start > 0 && size > 0){
-			return messageService.getAllMessagesPaginated(start, size);
+		if (filterBean.getStart() > 0 && filterBean.getSize() > 0) {
+			return messageService.getAllMessagesPaginated(filterBean.getStart(), filterBean.getSize());
 		}
 		return messageService.getAllMesssages();
 	}
-	
+
 	@GET
 	@Path("/{messageId}")
-	public Message getMessage(@PathParam("messageId") Long id){
-		return messageService.getMessage(id); 
+	public Message getMessage(@PathParam("messageId") Long id) {
+		return messageService.getMessage(id);
 	}
-	
+
 	/**
-	 * We can even use uri as:  something/{id1}/name/{id2}
+	 * We can even use uri as: something/{id1}/name/{id2}
 	 * 
-	 * @PathParam("id1") int id1,
-	 * @PathParam("id2") int id2
+	 * @PathParam("id1") int id1, @PathParam("id2") int id2
 	 * 
 	 */
-	
+
 	@POST
-	public Message addMessage(Message message){
+	public Message addMessage(Message message) {
 		return messageService.addMessage(message);
 	}
-	
+
 	@PUT
 	@Path("/{messageId}")
-	public Message updateMessage(@PathParam("messageId") long id, Message message){
+	public Message updateMessage(@PathParam("messageId") long id, Message message) {
 		message.setId(id);
 		return messageService.updateMessage(message);
 	}
-	
+
 	@DELETE
 	@Path("/{messageId}")
-	public void deleteMessage(@PathParam("messageId") long id){
+	public void deleteMessage(@PathParam("messageId") long id) {
 		messageService.deleteMessage(id);
+	}
+	
+	@Path("/{messageId}/comments")
+	public CommentResource getCommentResource(){
+		return new CommentResource();
 	}
 }
