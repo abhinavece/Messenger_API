@@ -1,6 +1,7 @@
 package org.api.heapdev.messenger.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,26 @@ public class MessageService {
 		return messages.get(id);
 	}
 	
+	public List<Message> getAllMessagesOfTheYear(int year){
+		List<Message> messageForYear = new ArrayList<>();
+		Calendar cal = Calendar.getInstance();
+		for(Message message : messages.values()){
+			cal.setTime(message.getCreated());
+			if(cal.get(Calendar.YEAR)==year){
+				messageForYear.add(message);
+			}
+		}		
+		return messageForYear;
+	}
+	
+	public List<Message> getAllMessagesPaginated(int start, int size){
+		ArrayList<Message> list = new ArrayList<>(messages.values());
+		if(start+size > list.size()) 
+			return new ArrayList<>();
+		return list.subList(start, start+size);
+	}
+	
+	
 	public Message addMessage(Message message){
 		message.setId(messages.size()+1);
 		messages.put(message.getId(), message);
@@ -43,8 +64,8 @@ public class MessageService {
 		return message;
 	}
 	
-	public Message deleteMessage(Message message){
-		return messages.remove(message.getId());
+	public Message deleteMessage(long id){
+		return messages.remove(id);
 	}
 	
 	
