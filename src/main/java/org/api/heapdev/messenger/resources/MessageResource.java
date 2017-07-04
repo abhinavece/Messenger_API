@@ -1,5 +1,6 @@
 package org.api.heapdev.messenger.resources;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.ws.rs.BeanParam;
@@ -12,10 +13,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
 
 import org.api.heapdev.messenger.model.Message;
 import org.api.heapdev.messenger.service.MessageService;
+import org.glassfish.jersey.server.Uri;
 
 @Path("/messages")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -49,8 +55,13 @@ public class MessageResource {
 	 */
 
 	@POST
-	public Message addMessage(Message message) {
-		return messageService.addMessage(message);
+	public Response addMessage(Message message, @Context UriInfo uriInfo) {
+		Message newMessage = messageService.addMessage(message);
+		String newId = String.valueOf(newMessage.getId());
+		URI uri = uriInfo.getAbsolutePathBuilder().path(newId).build();
+		return Response.created(uri)
+						.entity(newMessage)
+						.build();
 	}
 
 	@PUT
@@ -65,9 +76,9 @@ public class MessageResource {
 	public void deleteMessage(@PathParam("messageId") long id) {
 		messageService.deleteMessage(id);
 	}
-	
+
 	@Path("/{messageId}/comments")
-	public CommentResource getCommentResource(){
+	public CommentResource getCommentResource() {
 		return new CommentResource();
 	}
 }
