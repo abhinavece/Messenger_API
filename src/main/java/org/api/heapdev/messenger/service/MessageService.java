@@ -11,6 +11,13 @@ public class MessageService {
 	
 	private static Map<Long, Message> messages = new HashMap<>();
 	
+	public MessageService(){
+		messages.put(1, new Message(1, ""));
+		messages.put(2, "Second Message");
+		messages.put(3, "First Message");
+		messages.put(4, "First Message");
+	}
+	
 	public List<Message> getAllMesssages(){
 		return new ArrayList<Message>(messages.values());
 	}
