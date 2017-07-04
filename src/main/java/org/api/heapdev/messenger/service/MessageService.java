@@ -63,12 +63,8 @@ public class MessageService {
 		messages.put(message.getId(), message);
 		return message;
 	}
-	
-<<<<<<< HEAD
-	public Message deleteMessage(Long id){
-=======
+
 	public Message deleteMessage(long id){
->>>>>>> abhinav
 		return messages.remove(id);
 	}
 	
