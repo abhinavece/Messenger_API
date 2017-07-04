@@ -54,8 +54,7 @@ public class Message {
 
 	public void setCreated(Date created) {
 		this.created = created;
-	}
-	
+	}	
 	
 
 }
