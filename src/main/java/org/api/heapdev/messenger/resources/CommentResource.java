@@ -16,8 +16,6 @@ import org.api.heapdev.messenger.model.Comment;
 import org.api.heapdev.messenger.service.CommentService;
 
 @Path("/")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
 public class CommentResource {
 
 //	@GET
@@ -29,6 +27,7 @@ public class CommentResource {
 	static CommentService commentService = new CommentService();
 
 	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
 	public List<Comment> getAllComments(@PathParam("messageId") long messageId) {
 		return commentService.getAllComments(messageId);
 	}
@@ -41,12 +40,16 @@ public class CommentResource {
 	}
 	
 	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Comment addComment(@PathParam("messageId") long messageId, Comment comment){
 		return commentService.addComment(messageId, comment);
 	}
 	
 	@PUT
 	@PathParam("/{commentId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Comment updateComment(@PathParam("messageId") long messageId, 
 									@PathParam("commentId") long commentId,
 									Comment comment){
@@ -55,6 +58,7 @@ public class CommentResource {
 	}
 	
 	@DELETE
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Comment deleteComment(@PathParam("messageId") long messageId, 
 									@PathParam("commentId") long commentId){
 		return commentService.deleteComment(messageId, commentId);

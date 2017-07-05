@@ -6,13 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.api.heapdev.messenger.exception.DataNotFoundException;
 import org.api.heapdev.messenger.model.Message;
 
-public class MessageService {	
-	
+public class MessageService {
+
 	private static Map<Long, Message> messages = new HashMap<>();
-	
-	public MessageService(){
+
+	public MessageService() {
 		messages.put(1L, new Message(1L, "First Message", "Abhinav"));
 		messages.put(2L, new Message(2L, "Second Message", "Abhinav"));
 		messages.put(3L, new Message(3L, "Third Message", "Sanchay"));
@@ -21,52 +22,54 @@ public class MessageService {
 		messages.put(6L, new Message(6L, "Sixth Message", "Vivek"));
 		messages.put(7L, new Message(7L, "Seventh Message", "Vivek"));
 	}
-	
-	public List<Message> getAllMesssages(){
+
+	public List<Message> getAllMesssages() {
 		return new ArrayList<Message>(messages.values());
 	}
-	
-	public Message getMessage(Long id){
+
+	public Message getMessage(Long id) {
+//		Message message = messages.get(id);
+//		if (id == null) {
+//			//throw new DataNotFoundException("Message is not found with this id: " + id);
+//		}
 		return messages.get(id);
 	}
-	
-	public List<Message> getAllMessagesOfTheYear(int year){
+
+	public List<Message> getAllMessagesOfTheYear(int year) {
 		List<Message> messageForYear = new ArrayList<>();
 		Calendar cal = Calendar.getInstance();
-		for(Message message : messages.values()){
+		for (Message message : messages.values()) {
 			cal.setTime(message.getCreated());
-			if(cal.get(Calendar.YEAR)==year){
+			if (cal.get(Calendar.YEAR) == year) {
 				messageForYear.add(message);
 			}
-		}		
+		}
 		return messageForYear;
 	}
-	
-	public List<Message> getAllMessagesPaginated(int start, int size){
+
+	public List<Message> getAllMessagesPaginated(int start, int size) {
 		ArrayList<Message> list = new ArrayList<>(messages.values());
-		if(start+size > list.size()) 
+		if (start + size > list.size())
 			return new ArrayList<>();
-		return list.subList(start, start+size);
+		return list.subList(start, start + size);
 	}
-	
-	
-	public Message addMessage(Message message){
-		message.setId(messages.size()+1);
+
+	public Message addMessage(Message message) {
+		message.setId(messages.size() + 1);
 		messages.put(message.getId(), message);
 		return message;
 	}
-	
-	public Message updateMessage(Message message){
-		if(message.getId()<=0){
+
+	public Message updateMessage(Message message) {
+		if (message.getId() <= 0) {
 			return null;
 		}
 		messages.put(message.getId(), message);
 		return message;
 	}
 
-	public Message deleteMessage(long id){
+	public Message deleteMessage(long id) {
 		return messages.remove(id);
 	}
-	
-	
+
 }
