@@ -8,7 +8,9 @@
         
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>org.api.heapdev.messenger.resources</param-value>
+            <param-value>org.api.heapdev.messenger.resources,
+            			org.api.heapdev.messenger.exception
+            </param-value>
         </init-param>     
         <load-on-startup>1</load-on-startup>
     </servlet>

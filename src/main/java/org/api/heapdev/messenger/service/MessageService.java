@@ -28,11 +28,11 @@ public class MessageService {
 	}
 
 	public Message getMessage(Long id) {
-//		Message message = messages.get(id);
-//		if (id == null) {
-//			//throw new DataNotFoundException("Message is not found with this id: " + id);
-//		}
-		return messages.get(id);
+		Message message = messages.get(id);
+		if (message == null) {
+			throw new DataNotFoundException("Message is not found with this id: " + id);
+		}
+		return message;
 	}
 
 	public List<Message> getAllMessagesOfTheYear(int year) {
