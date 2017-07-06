@@ -12,20 +12,16 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.core.Response.Status;
-
 import org.api.heapdev.messenger.model.Message;
 import org.api.heapdev.messenger.service.MessageService;
-import org.glassfish.jersey.server.Uri;
 
 @Path("/messages")
 @Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
+@Produces(value={MediaType.APPLICATION_JSON, MediaType.TEXT_XML})
 public class MessageResource {
 
 	MessageService messageService = new MessageService();
@@ -38,13 +34,57 @@ public class MessageResource {
 		if (filterBean.getStart() > 0 && filterBean.getSize() > 0) {
 			return messageService.getAllMessagesPaginated(filterBean.getStart(), filterBean.getSize());
 		}
+		
 		return messageService.getAllMesssages();
 	}
 
 	@GET
 	@Path("/{messageId}")
-	public Message getMessage(@PathParam("messageId") Long id) {
-		return messageService.getMessage(id);
+	public Message getMessage(@PathParam("messageId") Long id, @Context UriInfo uriInfo) {
+		Message message = messageService.getMessage(id);
+		
+//		String uri = uriInfo.getAbsolutePathBuilder().build().toString();		
+		String uri = getUriForSelf(uriInfo, message);
+		String profileuri = getUriForAuthor(uriInfo, message);
+		String commentUri = getUriForComments(uriInfo, message);
+		
+		message.addLink(uri, "self");
+		message.addLink(profileuri, "author");
+		message.addLink(commentUri, "comments");
+		return message;
+	}
+
+	private String getUriForComments(UriInfo uriInfo, Message message) {
+		String commentUri = uriInfo
+									.getBaseUriBuilder()
+									.path(MessageResource.class)
+									.path(MessageResource.class, "getCommentResource")
+									.path(CommentResource.class)
+									.resolveTemplate("messageId", message.getId())
+									.build()
+									.toString();
+		return commentUri;	
+	}
+
+	private String getUriForAuthor(UriInfo uriInfo, Message message) {
+		String profileuri = uriInfo
+									.getBaseUriBuilder()
+									.path(ProfileResource.class)
+									.path(message.getAuthor())
+									.build()
+									.toString();
+		return profileuri;
+	}
+
+
+	private String getUriForSelf(UriInfo uriInfo, Message message) {
+		String uri = uriInfo
+							.getBaseUriBuilder()
+							.path(MessageResource.class)
+							.path(Long.toString(message.getId()))
+							.build()
+							.toString();
+		return uri;
 	}
 
 	/**
@@ -59,9 +99,7 @@ public class MessageResource {
 		Message newMessage = messageService.addMessage(message);
 		String newId = String.valueOf(newMessage.getId());
 		URI uri = uriInfo.getAbsolutePathBuilder().path(newId).build();
-		return Response.created(uri)
-						.entity(newMessage)
-						.build();
+		return Response.created(uri).entity(newMessage).build();
 	}
 
 	@PUT

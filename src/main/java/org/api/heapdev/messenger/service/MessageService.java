@@ -14,13 +14,13 @@ public class MessageService {
 	private static Map<Long, Message> messages = new HashMap<>();
 
 	public MessageService() {
-		messages.put(1L, new Message(1L, "First Message", "Abhinav"));
-		messages.put(2L, new Message(2L, "Second Message", "Abhinav"));
-		messages.put(3L, new Message(3L, "Third Message", "Sanchay"));
-		messages.put(4L, new Message(4L, "Fourth Message", "Abhinav"));
-		messages.put(5L, new Message(5L, "Fifth Message", "Sanchay"));
-		messages.put(6L, new Message(6L, "Sixth Message", "Vivek"));
-		messages.put(7L, new Message(7L, "Seventh Message", "Vivek"));
+		messages.put(1L, new Message(1L, "First Message", "abhinavece"));
+		messages.put(2L, new Message(2L, "Second Message", "abhinavece"));
+		messages.put(3L, new Message(3L, "Third Message", "sanchayspidy"));
+		messages.put(4L, new Message(4L, "Fourth Message", "abhinavece"));
+		messages.put(5L, new Message(5L, "Fifth Message", "sanchayspidy"));
+		messages.put(6L, new Message(6L, "Sixth Message", "vivek720"));
+		messages.put(7L, new Message(7L, "Seventh Message", "vivek720"));
 	}
 
 	public List<Message> getAllMesssages() {

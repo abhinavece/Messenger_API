@@ -8,7 +8,7 @@ import javax.ws.rs.ext.Provider;
 
 import org.api.heapdev.messenger.model.ErrorMessage;
 
-@Provider
+//DISABLED IT BY REMOVING TAG "@Provider"
 public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
 
 	@Override
